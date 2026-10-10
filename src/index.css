@@ -715,6 +715,52 @@ p {
   padding:24px 0;
   border-top:1px solid var(--line)
 }
+.service-card > .service-graphic {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  margin-bottom: 22px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f8f9fc;
+  overflow: hidden;
+}
+.service-graphic > svg {
+  display: block;
+  width: 100%;
+  height: 170px;
+}
+.service-graphic text {
+  fill: #172047;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  text-anchor: middle;
+}
+.diagram-card { fill: white; stroke: #d7deec; stroke-width: 1.5; }
+.diagram-hub { fill: #151b50; }
+.diagram-connector { stroke: #aeb9d1; stroke-width: 1.5; stroke-linecap: round; }
+.diagram-rule { stroke: #dfe5ef; stroke-width: 1; }
+.diagram-dot { fill: #f17c21; }
+.service-card > h3, .service-card > p, .service-card > ul, .service-card > .text-link {
+  grid-column: 2;
+}
+.service-card > .service-icon { grid-column: 1; grid-row: 2 / 6; }
+.form-heading .selected-package {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 3px 12px;
+  font-size: 12px;
+}
+.selected-package strong { font-weight: 600; color: var(--navy); white-space: nowrap; }
+@media (min-width: 601px) and (max-width: 900px) {
+  .service-card > h3, .service-card > p, .service-card > ul, .service-card > .text-link { grid-column: 1; }
+  .service-card > .service-icon { grid-row: 2; }
+}
+@media (max-width: 600px) {
+  .service-graphic > svg { height: 155px; }
+  .service-card > .service-graphic { margin-bottom: 18px; }
+}
 
 .service-icon {
   width:40px;

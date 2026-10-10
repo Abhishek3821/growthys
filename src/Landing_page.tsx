@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState, type ChangeEvent, type SubmitEvent } from 'react'
 import Icon from './components/Icon'
+import ServiceGraphic from './components/ServiceGraphic'
+import { buildEnquiryMessage } from './enquiry-message'
 import { Brand, Benefits, FaqList, Steps, ServicePanel } from './page-components'
 
 export type ContentPair = { title: string; text: string }
@@ -419,7 +421,8 @@ export default function GrowthysLandingPage() {
   const [enquiryPrepared, setEnquiryPrepared] = useState(false)
   const [formData, setFormData] = useState({ name: '', city: '', state: '', country: 'India', phone: '', email: '', service: 'Digital Marketing Services', website: '' })
   const menuButton = useRef<HTMLButtonElement>(null)
-  const message = `Hi Growthys! I'd like to claim an offer for ${formData.service}.\n\nName: ${formData.name}\nPhone: ${formData.phone}\nEmail: ${formData.email}\nLocation: ${formData.city}, ${formData.state}, ${formData.country}\nBusiness website: ${formData.website}`
+  const selectedOffer = offerCards.find(offer => offer.service === formData.service) ?? offerCards[0]
+  const message = buildEnquiryMessage(formData, selectedOffer)
   const whatsappUrl = `https://wa.me/917900351135?text=${encodeURIComponent(message)}`
   const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target
@@ -465,7 +468,7 @@ export default function GrowthysLandingPage() {
               <ul className="trust-list"><li><Icon name="check" />No hidden fees</li><li><Icon name="check" />Transparent monthly reports</li><li><Icon name="check" />Delhi-based team since 2022</li></ul>
             </div>
             <form id="lead-form" className="lead-form" onSubmit={handleSubmit}>
-              <div className="form-heading"><h2>Claim Your Offer</h2><p>Tell us what you need. We’ll help you take the next step.</p></div>
+              <div className="form-heading"><h2>Claim Your Offer</h2><p className="selected-package" aria-live="polite"><span>{selectedOffer.title}</span><strong>{selectedOffer.price}{selectedOffer.price !== 'Custom quote' ? ` ${selectedOffer.period}` : ''}</strong></p></div>
               <div className="form-grid">
                 <label>Full Name <span>*</span><input name="name" autoComplete="name" placeholder="Your full name" value={formData.name} onChange={handleChange} required maxLength={100} /></label>
                 <label>Phone Number <span>*</span><input type="tel" name="phone" autoComplete="tel" placeholder="+91 98765 43210" value={formData.phone} onChange={handleChange} required pattern="[+]?[0-9][0-9 \-]{6,19}" title="Include your country code, for example +91 98765 43210." /></label>
@@ -488,7 +491,7 @@ export default function GrowthysLandingPage() {
           <div className="offer-grid">{offerCards.map(offer => <article className={`offer-card${offer.featured ? ' featured' : ''}`} key={offer.service}><span className="service-label">{offer.service}</span><h3>{offer.title}</h3><p className="offer-description">{offer.description}</p><div className="offer-pricing"><p className={offer.featured ? 'regular-price' : ''}>{offer.regular === offer.price ? '\u00a0' : offer.regular}</p><strong>{offer.price}</strong><span>{offer.period}</span></div><a className={`button ${offer.featured ? 'button-white' : 'button-secondary'}`} href="#lead-form" onClick={() => choose(offer.service)}>Claim My Offer <Icon name="arrow" /></a><p className="offer-bonus"><Icon name="check" />{offer.bonus}</p></article>)}</div>
           <p className="offer-footnote">Need an online store or custom-coded web app? Shopify stores start at <strong>₹19,999</strong> and custom coded projects at <strong>₹24,999.</strong> <a href="#lead-form" onClick={() => choose('IT Services')}>Claim My Offer</a></p>
         </div></section>
-        <section className="section" id="services"><div className="container"><div className="section-heading"><h2>Everything You Need to Build, Automate and Scale</h2></div><div className="services-grid">{serviceSummaries.map((service, index) => <article className="service-card" key={service.id}><span className="service-icon"><Icon name={index === 0 ? 'growth' : index === 1 ? 'web' : index === 2 ? 'people' : 'pipeline'} /></span><h3>{service.title}</h3><p>{service.description}</p><ul>{service.features.map(feature => <li key={feature}><Icon name="check" />{feature}</li>)}</ul><a className="text-link" href={`#${service.id}`} onClick={() => openService(service.id)}>Explore this service <Icon name="arrow" /></a></article>)}</div></div></section>
+        <section className="section" id="services"><div className="container"><div className="section-heading"><h2>Everything You Need to Build, Automate and Scale</h2></div><div className="services-grid">{serviceSummaries.map((service, index) => <article className="service-card" key={service.id}><ServiceGraphic service={service.id} /><span className="service-icon"><Icon name={index === 0 ? 'growth' : index === 1 ? 'web' : index === 2 ? 'people' : 'pipeline'} /></span><h3>{service.title}</h3><p>{service.description}</p><ul>{service.features.map(feature => <li key={feature}><Icon name="check" />{feature}</li>)}</ul><a className="text-link" href={`#${service.id}`} onClick={() => openService(service.id)}>Explore this service <Icon name="arrow" /></a></article>)}</div></div></section>
         <section className="section process-section" id="process"><div className="container"><div className="section-heading"><h2>A Simple Process. Smarter Execution. Better Results.</h2><a className="text-link" href="#lead-form">Claim My Offer <Icon name="arrow" /></a></div><Steps items={overviewSteps} /></div></section>
         <section className="section why-section" id="why-choose"><div className="container"><div className="section-heading"><h2>Why Businesses Choose Growthys</h2><a className="button button-white" href="tel:+917900351135">Book a call <Icon name="phone" /></a></div><Benefits items={overviewBenefits} /></div></section>
         <section className="section"><div className="container faq-layout"><div><h2>Frequently Asked Questions</h2><p>Have something else on your mind?</p><a className="text-link" href="tel:+917900351135">Call 7900351135 <Icon name="phone" /></a></div><FaqList items={overviewFaqs} /></div></section>

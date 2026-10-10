@@ -34,6 +34,17 @@ const { serviceDetails, serviceSummaries, offerCards, overviewBenefits, overview
 const server = await createServer({ server: { middlewareMode: true }, appType: 'custom' })
 try {
   const { default: LandingPage } = await server.ssrLoadModule('/src/Landing_page.tsx')
+  const { buildEnquiryMessage } = await server.ssrLoadModule('/src/enquiry-message.ts')
+  for (const offer of offerCards) {
+    const fields = { name: 'QA & Example', phone: '+91 9876543210', email: 'qa+offer@example.com', city: 'Gurgaon', state: 'Haryana', country: 'India', service: offer.service, website: 'Yes' }
+    const message = buildEnquiryMessage(fields, offer)
+    for (const expected of [offer.service, offer.title, offer.price, offer.description, offer.bonus, ...Object.values(fields)]) {
+      assert(message.includes(expected), `WhatsApp message missing: ${expected}`)
+    }
+    const handoff = new URL(`https://wa.me/917900351135?text=${encodeURIComponent(message)}`)
+    assert.equal(handoff.searchParams.get('text'), message, 'WhatsApp message must survive URL encoding')
+    if (offer.price === 'Custom quote') assert(!message.includes('₹29,999'), 'Unconfirmed prices must not be sent')
+  }
   const html = renderToStaticMarkup(React.createElement(LandingPage))
   const normalize = text => text.replace(/\s+/g, ' ').trim()
   const text = normalize(html.replace(/<[^>]*>/g, ' ').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#x27;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>'))
@@ -60,7 +71,7 @@ try {
   const shell = readFileSync('index.html', 'utf8')
   assert(shell.includes('Digital Marketing, IT, HRMS &amp; CRM Offers'))
   assert(shell.includes('digital marketing from ₹4,999/month'))
-  console.log('PASS: all supplied service copy renders; 32 modules, 28 FAQs, 4 plans, 4 service panels, 8 labelled fields, unique anchors and valid metadata. No unresolved publishing placeholders or editorial notes.')
+  console.log('PASS: all supplied service copy renders; 32 modules, 28 FAQs, 4 plans, 4 service panels, 8 labelled fields, unique anchors and valid metadata. All four WhatsApp packages include complete enquiry details and survive URL encoding. No unresolved publishing placeholders or editorial notes.')
 } finally {
   await server.close()
 }

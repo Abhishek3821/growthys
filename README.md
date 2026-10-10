@@ -28,3 +28,7 @@ Use `npm run preview` to preview the production build.
 - `public/logo.png`: supplied Growthys artwork with a transparent background; favicon, touch icon and social preview assets are also in `public`.
 
 The enquiry form opens WhatsApp with the entered details for the visitor to review and send. It does not store submissions or confirm reservations. Confirm offer availability, final project scope and terms during consultation.
+
+The selected service determines the package displayed above the form. `src/enquiry-message.ts` includes that package's name, price, scope and bonus alongside all contact fields in the WhatsApp handoff. The content check validates all four package messages and URL encoding.
+
+`src/components/ServiceGraphic.tsx` contains the responsive SVG service illustrations. These explain the services without presenting invented performance metrics.
