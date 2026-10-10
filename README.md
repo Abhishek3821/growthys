@@ -23,6 +23,8 @@ Use `npm run preview` to preview the production build.
 
 - `src/Landing_page.tsx`: current page content, packages, service details, navigation and enquiry form.
 - `src/offer-content.ts` and `src/landing-content.ts`: earlier imported content reference files.
-- Styling uses Tailwind utilities; `src/index.css` contains the Tailwind import.
+- `src/page-components.tsx`: shared service panels, FAQs, benefits and process steps.
+- `src/index.css`: responsive layout, typography, form and component styles.
+- `public/logo.png`: supplied Growthys artwork with a transparent background; favicon, touch icon and social preview assets are also in `public`.
 
 The enquiry form opens WhatsApp with the entered details for the visitor to review and send. It does not store submissions or confirm reservations. Confirm offer availability, final project scope and terms during consultation.
