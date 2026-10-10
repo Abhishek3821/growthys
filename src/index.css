@@ -350,7 +350,7 @@ summary::-webkit-details-marker {
 
 h1 {
   font-size:clamp(34px,3.2vw,46px);
-  line-height:1.14;
+  line-height:1.75;
   letter-spacing:-1.6px;
   font-weight:600
 }
@@ -1453,7 +1453,7 @@ details[open]>summary .toggle-vertical {
   }
   .hero-copy h1 {
     font-size:clamp(30px,7.9vw,39px);
-    line-height:1.15;
+    line-height:2;
     letter-spacing:-1px
   }
   .offer-badge {
@@ -1692,7 +1692,7 @@ details[open]>summary .toggle-vertical {
   }
   .hero-copy h1 {
     font-size:31px;
-    line-height:1.1
+    line-height:1.5
   }
   .hero-description {
     font-size:13px;
